@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Microsoft.Identity.Client;
@@ -11,45 +13,63 @@ namespace StudentApp
     {
         static void Main(string[] args)
         {
-           var sessionFactory = Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2008
-                    .ConnectionString(@"Data Source=LAPTOP-SP1NASH4\SQLEXPRESS; 
-                                       Initial Catalog=RASELMAHMUD; 
-                                       Integrated Security=True; 
-                                       Connect Timeout=15; 
-                                       Encrypt=False; 
-                                       TrustServerCertificate=False; 
-                                       ApplicationIntent=ReadWrite; 
-                                       MultiSubnetFailover=False"))
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Student>())
-                .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(false, true))
-                .BuildSessionFactory();
 
-                     //  int hello =int.Parse(Console.ReadLine());
 
-            using (var session = sessionFactory.OpenSession())
-            {
-                using (var tx = session.BeginTransaction())
+            int ask;
+            Console.WriteLine("enter a id to retrive data from database");
+
+                ask=int.Parse(Console.ReadLine());
+
+            using (var session = NHibernateHelper.GetSession()) { 
+            
+                       using(var tx= session.BeginTransaction())
                 {
-                    var student1 = session.Get<Student>(1);
-                    if (student1 != null ){
-                        
 
-                        Console.WriteLine($" {student1.FirstName} {student1.LastName}");
-                    }
-
-                    else
+                    //  read operation 
+                    var studet1 = session.Get<Student>(ask);
+                    if (studet1 != null)
                     {
-                        Console.WriteLine("no data available");
-
+                        Console.WriteLine($"{studet1.FirstName} {studet1.LastName}");   
                     }
-                     tx.Commit();
+                    tx.Commit();
 
                 }
+
+
 
                 Console.WriteLine("Students saved successfully.");
                 Console.ReadLine();
             }
+
+
+            //  write operation
+
+            using (var session = NHibernateHelper.GetSession()) {
+
+                using ( var tx = session.BeginTransaction()) {
+
+                    try
+                    {
+                        var student3 = new Student()
+                        {
+                            ID = 3,
+                            FirstName = "raselL",
+                            LastName = "mahmud"
+                        };
+
+
+                        session.Save(student3);
+
+                        tx.Commit();
+                        Console.WriteLine("save sucessfully_");
+                    }
+                    catch (Exception ex) { } 
+
+                
+                }
+            }
+
+            
 
 
         }
