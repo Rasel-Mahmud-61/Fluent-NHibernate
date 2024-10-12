@@ -16,58 +16,49 @@ namespace StudentApp
 
 
             int ask;
-            Console.WriteLine("enter a id to retrive data from database");
+            Console.WriteLine("enter  a digit to fix which type of operation you want to perform ");
 
                 ask=int.Parse(Console.ReadLine());
 
-            using (var session = NHibernateHelper.GetSession()) { 
+            if (ask == 1) { 
+               ReadData  readData = new ReadData();
+
+                readData.show();
+
+            }
+
+            //  write operation 
+            if (ask == 2) { 
+              InsertData insertData = new InsertData();
+                insertData.InsertValue();
+
+             
+            }
+            //update 
+            if (ask == 3) {
             
-                       using(var tx= session.BeginTransaction())
-                {
+                 UpdateClass updateClass = new UpdateClass();
 
-                    //  read operation 
-                    var studet1 = session.Get<Student>(ask);
-                    if (studet1 != null)
-                    {
-                        Console.WriteLine($"{studet1.FirstName} {studet1.LastName}");   
-                    }
-                    tx.Commit();
+                updateClass.updateData();
 
-                }
-
-
-
-                Console.WriteLine("Students saved successfully.");
-                Console.ReadLine();
+            
+            
             }
 
 
-            //  write operation
+            // delete data from database 
 
-            using (var session = NHibernateHelper.GetSession()) {
+            if (ask == 4) { 
+            
 
-                using ( var tx = session.BeginTransaction()) {
+                 DeleteData deleteData = new DeleteData();
+                deleteData.DeleteFromDatabase();
 
-                    try
-                    {
-                        var student3 = new Student()
-                        {
-                            ID = 3,
-                            FirstName = "raselL",
-                            LastName = "mahmud"
-                        };
-
-
-                        session.Save(student3);
-
-                        tx.Commit();
-                        Console.WriteLine("save sucessfully_");
-                    }
-                    catch (Exception ex) { } 
-
-                
-                }
             }
+
+
+           
+
 
             
 

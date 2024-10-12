@@ -170,11 +170,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeleteData.cs" />
+    <Compile Include="InsertData.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadData.cs" />
     <Compile Include="Student.cs" />
     <Compile Include="StudentMap.cs" />
+    <Compile Include="UpdateClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
